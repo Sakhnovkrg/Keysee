@@ -1,14 +1,3 @@
-/*
-import Store from 'electron-store'
-import { Settings, defaultSettings } from '../../shared/settingsSchema'
-
-const store = new Store<Settings>({
-  defaults: defaultSettings
-})
-
-export default store
-*/
-
 import Store from 'electron-store'
 
 export type Settings = {

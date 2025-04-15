@@ -104,8 +104,8 @@ onMounted(async () => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', handleSaveShortcut)
 })
-</script>
 
+</script>
 
 <template>
   <div v-if="settings" class="settings-screen">
