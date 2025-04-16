@@ -1,28 +1,3 @@
-/*
-import { ref } from 'vue'
-import { Settings, defaultSettings } from '../../shared/settingsSchema'
-
-const settings = ref<Settings>({ ...defaultSettings })
-
-export async function loadSettings() {
-  const loaded = await window.ipcRenderer.invoke('settings:get')
-  settings.value = { ...defaultSettings, ...loaded }
-}
-
-export async function saveSettings(patch: Partial<Settings>) {
-  settings.value = { ...settings.value, ...patch }
-  await window.ipcRenderer.invoke('settings:set', patch)
-}
-
-export function useSettings() {
-  return {
-    settings,
-    loadSettings,
-    saveSettings,
-  }
-}
-*/
-
 import { ref } from 'vue'
 
 export type Settings = {
@@ -56,6 +31,8 @@ export type Settings = {
   rippleColorLeft: string
   rippleColorMiddle: string
   rippleColorRight: string
+
+  snoozeUpdateCheckUntil?: string
 }
 
 export const defaultSettings: Settings = {
