@@ -1,7 +1,7 @@
 {
   "name": "keysee",
   "productName": "Keysee",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "main": "dist-electron/main/index.js",
   "description": "Free and open-source tool that shows keyboard and mouse input on screen — useful for tutorials and software demonstrations.",
   "author": "Alexandr Sakhnov",

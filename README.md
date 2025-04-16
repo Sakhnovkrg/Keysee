@@ -36,7 +36,7 @@ It's safe to allow the app through the firewall for full functionality
 
 ## Contacts
 
-<a href="https://discord.com/invite/2XUs6muFy4" target="_blank">
+<a href="https://discord.com/channels/1361626369418854520/" target="_blank">
   <img src="https://img.shields.io/badge/Join_our_Discord-7289DA?logo=discord&logoColor=white&style=for-the-badge" alt="Join our Discord">
 </a>
 
