@@ -18,7 +18,7 @@ onMounted(async () => {
   <div class="links">
     <a href="https://sakhnovkrg.github.io/Keysee/" target="_blank">Website</a>
     <a href="https://github.com/Sakhnovkrg/Keysee" target="_blank">GitHub</a>
-    <a href="mailto:sakhnov.krg@gmail.com">Contact me</a>
+    <a href="https://discord.gg/2XUs6muFy4" target="_blank">Discord</a>
     <a href="https://www.paypal.com/paypalme/sakhnovkrg">Donate</a>
   </div>
 </template>

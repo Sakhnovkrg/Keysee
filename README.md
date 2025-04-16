@@ -11,7 +11,7 @@
 During tutorials or live demos, it's not always clear what keys or buttons are being used.
 Keysee provides simple, clear input visuals without distracting from the main content.
 
-## Highlights
+## Features
 
 - Displays keys, mouse buttons, and scroll events
 - Filters out noise (like repeated keys)
@@ -33,6 +33,12 @@ It's safe to allow the app through the firewall for full functionality
 ## Download
 
 [Windows](https://github.com/sakhnovkrg/keysee/releases)
+
+## Contacts
+
+<a href="https://discord.com/invite/2XUs6muFy4" target="_blank">
+  <img src="https://img.shields.io/badge/Join_our_Discord-7289DA?logo=discord&logoColor=white&style=for-the-badge" alt="Join our Discord">
+</a>
 
 ## License
 

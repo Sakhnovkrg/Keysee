@@ -58,23 +58,31 @@ export function useEventManager({ displayDuration, onPulse }: Options) {
       (raw.type === 'keyboard' && isModifierKey(raw.key))
     ) return
 
-    if (raw.type === 'keyboard' && !hasAnyModifiers(raw.modifiers)) {
-      const last = events.value.findLast((e) => e.type === 'keyboard' && !hasAnyModifiers(e.modifiers))
-      if (last) {
-        if (last.key === raw.key) {
-          last.count = (last.count || 1) + 1
-        } else {
-          last.key = raw.key
-          last.count = 1
-        }
-        onPulse(last.id)
-        scheduleCleanup(last.id)
-        return
+    const last = events.value[events.value.length - 1]
+    const isSingle = raw.type === 'keyboard' && !hasAnyModifiers(raw.modifiers)
+
+    if (
+      isSingle &&
+      last &&
+      last.id === lastSingleKeyId
+    ) {
+      if (last.key === raw.key) {
+        last.count = (last.count || 1) + 1
+      } else {
+        last.key = raw.key
+        last.count = 1
       }
+      onPulse(last.id)
+      scheduleCleanup(last.id)
+      return
     }
 
-    const last = events.value[events.value.length - 1]
-    if (last && eventKey(last) === key && last.type === raw.type) {
+    if (
+      last &&
+      eventKey(last) === key &&
+      last.type === raw.type &&
+      !isSingle
+    ) {
       last.count = (last.count || 1) + 1
       onPulse(last.id)
       scheduleCleanup(last.id)
@@ -86,11 +94,7 @@ export function useEventManager({ displayDuration, onPulse }: Options) {
     onPulse(item.id)
     scheduleCleanup(item.id)
 
-    if (raw.type === 'keyboard' && !hasAnyModifiers(raw.modifiers)) {
-      lastSingleKeyId = item.id
-    } else {
-      lastSingleKeyId = null
-    }
+    lastSingleKeyId = isSingle ? item.id : null
   }
 
   return {
