@@ -13,12 +13,12 @@ onMounted(async () => {
   <p>
     <strong>Keysee</strong> is a free and open-source tool for visualizing keyboard and mouse input. Useful for tutorials and software demonstrations.
   </p>
-  <div class="version">v0.9.3</div>
+  <div class="version">v0.9.4</div>
 
   <div class="links">
     <a href="https://sakhnovkrg.github.io/Keysee/" target="_blank">Website</a>
     <a href="https://github.com/Sakhnovkrg/Keysee" target="_blank">GitHub</a>
-    <a href="https://discord.com/channels/1361626369418854520/" target="_blank">Discord</a>
+    <a href="https://discord.gg/88ptRYnff9" target="_blank">Discord</a>
     <a href="https://www.paypal.com/paypalme/sakhnovkrg">Donate</a>
   </div>
 </template>

@@ -30,13 +30,13 @@ This may trigger a firewall prompt on first launch.
 It's safe to allow the app through the firewall for full functionality
 - Once launched, Keysee runs in the background and can be managed from the system tray.
 
-## Download
+## Downloads
 
 [Windows](https://github.com/sakhnovkrg/keysee/releases)
 
 ## Contacts
 
-<a href="https://discord.com/channels/1361626369418854520/" target="_blank">
+<a href="https://discord.gg/88ptRYnff9" target="_blank">
   <img src="https://img.shields.io/badge/Join_our_Discord-7289DA?logo=discord&logoColor=white&style=for-the-badge" alt="Join our Discord">
 </a>
 
