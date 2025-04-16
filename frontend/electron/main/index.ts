@@ -27,17 +27,15 @@ const VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(APP_ROOT, 'public') : RENDER
 process.env.APP_ROOT = APP_ROOT
 process.env.VITE_PUBLIC = VITE_PUBLIC
 
-// Windows-specific settings
 if (os.release().startsWith('6.1')) app.disableHardwareAcceleration()
 if (process.platform === 'win32') app.setAppUserModelId('com.keysee.app')
 
-// Prevent multiple instances
 if (!app.requestSingleInstanceLock()) {
   app.quit()
   process.exit(0)
 }
 
-// IPC Handlers
+// IPC
 ipcMain.handle('settings:get', () => store.store)
 ipcMain.handle('settings:set', (_event, payload) => store.set(payload))
 ipcMain.handle('settings:update', (_event, payload) => {
@@ -47,7 +45,7 @@ ipcMain.handle('settings:update', (_event, payload) => {
   })
 })
 
-// Create main overlay window
+// Window
 async function createWindow() {
   win = new BrowserWindow({
     frame: false,
@@ -76,12 +74,11 @@ async function createWindow() {
   }
 }
 
-// Tray setup
+// Tray
 function createTray() {
   tray = new Tray(path.join(VITE_PUBLIC, 'icon.png'))
   const menu = Menu.buildFromTemplate([
     { label: 'Settings', click: createSettingsWindow },
-    { label: 'Check for updates', click: checkForUpdates },
     { label: 'About', click: createAboutWindow },
     { type: 'separator' },
     { label: 'Quit', click: () => app.quit() },
@@ -90,7 +87,7 @@ function createTray() {
   tray.setContextMenu(menu)
 }
 
-// Backend process logic
+// Backend
 function resolveBackendPath(): string {
   if (VITE_DEV_SERVER_URL) return path.join(APP_ROOT, 'keysee-backend.exe')
 
@@ -116,20 +113,20 @@ function launchBackend() {
   backendProcess.unref()
 }
 
-// GitHub release check
+function shouldCheckForUpdates(): boolean {
+  const snoozeUntil = store.get('snoozeUpdateCheckUntil') as string | undefined
+  if (!snoozeUntil) return true
+
+  const now = new Date()
+  return now > new Date(snoozeUntil)
+}
+
 export async function checkForUpdates() {
   try {
     const res = await fetch('https://api.github.com/repos/Sakhnovkrg/Keysee/releases/latest')
 
     if (!res.ok) {
-      const msg = res.status === 404
-        ? 'There are no releases published on GitHub.'
-        : `GitHub responded with ${res.status}`
-      dialog.showMessageBox({
-        type: 'error',
-        title: 'Update check failed',
-        message: msg,
-      })
+      console.warn('Update check failed:', res.status)
       return
     }
 
@@ -137,12 +134,7 @@ export async function checkForUpdates() {
     const latest = data.tag_name?.replace(/^v/, '')
 
     if (!latest) {
-      dialog.showMessageBox({
-        type: 'error',
-        title: 'Update check failed',
-        message: 'Could not determine latest version.',
-      })
-      console.warn('Unexpected GitHub API response:', data)
+      console.warn('Update check failed: no tag_name')
       return
     }
 
@@ -155,32 +147,29 @@ export async function checkForUpdates() {
         defaultId: 0,
         cancelId: 1,
       })
-      
+
       if (result.response === 0) {
         shell.openExternal('https://github.com/Sakhnovkrg/Keysee/releases/latest')
+      } else {
+        const snoozeUntil = new Date()
+        snoozeUntil.setDate(snoozeUntil.getDate() + 7)
+        store.set({ snoozeUpdateCheckUntil: snoozeUntil.toISOString() })
       }
-    } else {
-      dialog.showMessageBox({
-        type: 'info',
-        title: 'No updates',
-        message: 'You have the latest version.',
-      })
     }
   } catch (err) {
-    dialog.showMessageBox({
-      type: 'error',
-      title: 'Update check failed',
-      message: 'Could not fetch latest version.',
-    })
-    console.error('Update check error:', err)
+    console.warn('Update check error:', err)
   }
 }
 
-// Lifecycle hooks
+// Init
 app.whenReady().then(() => {
   launchBackend()
   createWindow()
   createTray()
+
+  if (shouldCheckForUpdates()) {
+    checkForUpdates()
+  }
 })
 
 app.on('window-all-closed', () => {

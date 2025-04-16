@@ -31,6 +31,7 @@ export type Settings = {
   rippleColorLeft: string
   rippleColorMiddle: string
   rippleColorRight: string
+  snoozeUpdateCheckUntil?: string
 }
 
 const store = new Store<Settings>({

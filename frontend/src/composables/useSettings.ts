@@ -31,6 +31,8 @@ export type Settings = {
   rippleColorLeft: string
   rippleColorMiddle: string
   rippleColorRight: string
+
+  snoozeUpdateCheckUntil?: string
 }
 
 export const defaultSettings: Settings = {

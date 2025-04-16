@@ -68,7 +68,7 @@ function getEventClass(e: any): string {
                 {{ format(e) }}
               </template>
               <template v-else-if="e.type === 'wheel'">
-                Scroll {{ format(e) }}
+                {{ format(e) }} Scroll
               </template>
               <template v-else-if="e.type === 'mousedown'">
                 {{ format(e) }} Click
