@@ -13,7 +13,7 @@ onMounted(async () => {
   <p>
     <strong>Keysee</strong> is a free and open-source tool for visualizing keyboard and mouse input. Useful for tutorials and software demonstrations.
   </p>
-  <div class="version">v0.9.4</div>
+  <div class="version">v0.9.5</div>
 
   <div class="links">
     <a href="https://sakhnovkrg.github.io/Keysee/" target="_blank">Website</a>

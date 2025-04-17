@@ -1,4 +1,3 @@
-// composables/useCssVars.ts
 import { Settings } from './useSettings'
 
 export function useCssVars() {
@@ -31,11 +30,20 @@ export function useCssVars() {
       '--ripple-transparency': settings.rippleTransparency,
 
       '--bottom-offset': settings.overlayBottomOffset,
+      '--side-offset': settings.overlaySideOffset,
     }
 
     for (const [key, value] of Object.entries(map)) {
       root.style.setProperty(key, String(value))
     }
+
+    const positionMap: Record<string, string> = {
+      left: 'flex-start',
+      center: 'center',
+      right: 'flex-end',
+    }
+
+    root.style.setProperty('--overlay-position', positionMap[settings.overlayPosition])
   }
 
   return { applyFromSettings }

@@ -1,11 +1,15 @@
 import Store from 'electron-store'
 
+export type OverlayPosition = 'left' | 'center' | 'right'
+
 export type Settings = {
   // Overlay appearance
   overlayBackground: string
   overlayTransparency: string
   overlayBorderRadius: string
   overlayBottomOffset: string
+  overlaySideOffset: string
+  overlayPosition: OverlayPosition,
 
   // Input appearance
   singleKeyBgColor: string
@@ -41,6 +45,8 @@ const store = new Store<Settings>({
     overlayTransparency: '80%',
     overlayBorderRadius: '8px',
     overlayBottomOffset: '50px',
+    overlaySideOffset: '15px',
+    overlayPosition: 'center',
 
     // Input appearance
     singleKeyBgColor: '#FFFFFF',

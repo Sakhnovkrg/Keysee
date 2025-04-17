@@ -191,3 +191,14 @@ app.on('second-instance', () => {
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow()
 })
+
+// ipcMain.handle('get-fonts-from-folder', () => {
+//   const fontDir = 'C:\\Windows\\Fonts'
+//   const files = fs.readdirSync(fontDir)
+
+//   const fonts = files
+//     .filter(f => /\.(ttf|otf|ttc|fon)$/i.test(f))
+//     .map(f => path.parse(f).name)
+
+//   return fonts
+// })

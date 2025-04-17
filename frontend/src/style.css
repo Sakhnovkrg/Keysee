@@ -5,6 +5,7 @@
   --key-border-radius: 4px;
   --overlay-border-radius: 8px;
   --font-size: 16px;
+  --overlay-position: center;
 
   --key-event-bg: #FFFFFF;
   --combo-event-bg: #00FF88;
@@ -24,6 +25,7 @@
   --ripple-transparency: 0; /* 0 - 1 */
 
   --bottom-offset: 50px;
+  --side-offset: 15px;
 }
 
 html,
@@ -39,10 +41,11 @@ body {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  justify-content: center;
+  justify-content: var(--overlay-position);
   align-items: center;
   z-index: 9999;
   pointer-events: none;
+  width: calc(100% - var(--side-offset) * 2);
 }
 
 .events {

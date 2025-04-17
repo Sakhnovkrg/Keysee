@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, watchEffect, computed, onBeforeUnmount } from 'vue'
 import { useSettings } from '../composables/useSettings'
-// import { Settings, defaultSettings } from '../../shared/settingsSchema'
 import { Settings, defaultSettings } from '../composables/useSettings'
 import { ElMessage } from 'element-plus'
 
@@ -16,6 +15,7 @@ const overlayBorderRadius = ref(0)
 const keyBackgroundTransparency = ref(0)
 const overlayTransparency = ref(0)
 const overlayBottomOffset = ref(0)
+const overlaySideOffset = ref(0)
 const rippleSize = ref(0)
 const rippleDuration = ref(0)
 const rippleDisabled = computed(() => !settings.value?.rippleEnabled)
@@ -29,6 +29,7 @@ watchEffect(() => {
   keyBackgroundTransparency.value = parseInt(settings.value.keyBackgroundTransparency)
   overlayTransparency.value = parseInt(settings.value.overlayTransparency)
   overlayBottomOffset.value = parseInt(settings.value.overlayBottomOffset)
+  overlaySideOffset.value = parseInt(settings.value.overlaySideOffset)
   rippleSize.value = parseInt(settings.value.rippleSize)
   rippleDuration.value = parseInt(settings.value.rippleDuration)
 })
@@ -42,6 +43,7 @@ watchEffect(() => {
   settings.value.keyBackgroundTransparency = `${keyBackgroundTransparency.value}%`
   settings.value.overlayTransparency = `${overlayTransparency.value}%`
   settings.value.overlayBottomOffset = `${overlayBottomOffset.value}px`
+  settings.value.overlaySideOffset = `${overlaySideOffset.value}px`
   settings.value.rippleSize = `${rippleSize.value}px`
   settings.value.rippleDuration = `${rippleDuration.value}ms`
 })
@@ -83,7 +85,7 @@ async function restoreDefaults() {
 }
 
 function handleSaveShortcut(e: KeyboardEvent) {
-  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+  if ((e.ctrlKey || e.metaKey) && e.code === 'KeyS') {
     e.preventDefault()
     if (!applyDisabled.value) {
       saveSettings()
@@ -123,8 +125,8 @@ onBeforeUnmount(() => {
         <h3>Background transparency</h3>
         <div class="settings-item">
           <el-slider :format-tooltip="(val: number) => `${val}%`"
-            @dblclick="overlayTransparency = parseInt(defaultSettings.overlayTransparency)" v-model="overlayTransparency" :min="0"
-            :max="100" :step="1" />
+            @dblclick="overlayTransparency = parseInt(defaultSettings.overlayTransparency)"
+            v-model="overlayTransparency" :min="0" :max="100" :step="1" />
         </div>
       </div>
 
@@ -139,12 +141,34 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="settings-grid">
+        <h3>Position</h3>
+
+        <div class="settings-item">
+          <el-radio-group v-model="settings.overlayPosition" size="large">
+            <el-radio-button size="default" label="◀" value="left" title="Align left" />
+            <el-radio-button size="default" label="⦿" value="center" title="Align center" />
+            <el-radio-button size="default" label="▶" value="right" title="Align right" />
+          </el-radio-group>
+        </div>
+      </div>
+
+      <div class="settings-grid">
         <h3>Bottom offset</h3>
 
         <div class="settings-item">
           <el-slider :format-tooltip="(val: number) => `${val}px`"
-            @dblclick="overlayBottomOffset = parseInt(defaultSettings.overlayBottomOffset)" v-model="overlayBottomOffset" :min="50"
-            :max="150" :step="1" />
+            @dblclick="overlayBottomOffset = parseInt(defaultSettings.overlayBottomOffset)"
+            v-model="overlayBottomOffset" :min="50" :max="600" :step="1" />
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <h3>Side offset</h3>
+
+        <div class="settings-item">
+          <el-slider :format-tooltip="(val: number) => `${val}px`"
+            @dblclick="overlaySideOffset = parseInt(defaultSettings.overlaySideOffset)" v-model="overlaySideOffset"
+            :min="10" :max="600" :step="1" />
         </div>
       </div>
     </div>
@@ -215,8 +239,8 @@ onBeforeUnmount(() => {
 
         <div class="settings-item">
           <el-slider :format-tooltip="(val: number) => `${val}%`"
-            @dblclick="keyBackgroundTransparency = parseInt(defaultSettings.keyBackgroundTransparency)" v-model="keyBackgroundTransparency"
-            :min="0" :max="100" :step="1" />
+            @dblclick="keyBackgroundTransparency = parseInt(defaultSettings.keyBackgroundTransparency)"
+            v-model="keyBackgroundTransparency" :min="0" :max="100" :step="1" />
         </div>
       </div>
 
@@ -233,8 +257,8 @@ onBeforeUnmount(() => {
 
         <div class="settings-item">
           <el-slider :format-tooltip="(val: number) => `${val}ms`"
-            @dblclick="settings.eventDisplayDuration = defaultSettings.eventDisplayDuration" v-model="settings.eventDisplayDuration"
-            :min="500" :max="5000" :step="100" />
+            @dblclick="settings.eventDisplayDuration = defaultSettings.eventDisplayDuration"
+            v-model="settings.eventDisplayDuration" :min="500" :max="5000" :step="100" />
         </div>
       </div>
     </div>
@@ -247,8 +271,7 @@ onBeforeUnmount(() => {
         <div class="settings-grid">
           <h3>Ripple size</h3>
           <div class="settings-item">
-            <el-slider :format-tooltip="(val: number) => `${val}px`"
-              :disabled="rippleDisabled"
+            <el-slider :format-tooltip="(val: number) => `${val}px`" :disabled="rippleDisabled"
               @dblclick="rippleSize = parseInt(defaultSettings.rippleSize)" v-model="rippleSize" :min="4" :max="64"
               :step="1" />
           </div>
@@ -257,18 +280,16 @@ onBeforeUnmount(() => {
         <div class="settings-grid">
           <h3>Ripple transparency</h3>
           <div class="settings-item">
-            <el-slider :format-tooltip="(val: number) => Math.round(val * 100) + '%'"
-              :disabled="rippleDisabled"
-              @dblclick="settings.rippleTransparency = defaultSettings.rippleTransparency" v-model="settings.rippleTransparency" :min="0"
-              :max="1" :step="0.01" />
+            <el-slider :format-tooltip="(val: number) => Math.round(val * 100) + '%'" :disabled="rippleDisabled"
+              @dblclick="settings.rippleTransparency = defaultSettings.rippleTransparency"
+              v-model="settings.rippleTransparency" :min="0" :max="1" :step="0.01" />
           </div>
         </div>
 
         <div class="settings-grid">
           <h3>Ripple duration</h3>
           <div class="settings-item">
-            <el-slider :format-tooltip="(val: number) => `${val}ms`"
-              :disabled="rippleDisabled"
+            <el-slider :format-tooltip="(val: number) => `${val}ms`" :disabled="rippleDisabled"
               @dblclick="rippleDuration = parseInt(defaultSettings.rippleDuration)" v-model="rippleDuration" :min="300"
               :max="3000" :step="100" />
           </div>
@@ -276,15 +297,18 @@ onBeforeUnmount(() => {
 
         <div class="settings-grid">
           <div class="settings-item">
-            <el-color-picker :predefine="[defaultSettings.rippleColorLeft]" v-model="settings.rippleColorLeft" :disabled="rippleDisabled" />
+            <el-color-picker :predefine="[defaultSettings.rippleColorLeft]" v-model="settings.rippleColorLeft"
+              :disabled="rippleDisabled" />
             <span>Left</span>
           </div>
           <div class="settings-item">
-            <el-color-picker :predefine="[defaultSettings.rippleColorMiddle]" v-model="settings.rippleColorMiddle" :disabled="rippleDisabled" />
+            <el-color-picker :predefine="[defaultSettings.rippleColorMiddle]" v-model="settings.rippleColorMiddle"
+              :disabled="rippleDisabled" />
             <span>Middle</span>
           </div>
           <div class="settings-item">
-            <el-color-picker :predefine="[defaultSettings.rippleColorRight]" v-model="settings.rippleColorRight" :disabled="rippleDisabled" />
+            <el-color-picker :predefine="[defaultSettings.rippleColorRight]" v-model="settings.rippleColorRight"
+              :disabled="rippleDisabled" />
             <span>Right</span>
           </div>
         </div>
